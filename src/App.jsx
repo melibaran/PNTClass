@@ -1,33 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import useUsuarios from './hooks/useUsuarios';
+import { useState } from 'react';
+
+const initValue2 =[{
+  id: "123",
+  username: "Mel"
+}]
+
+//USEEFFECT:
 
 function App() {
-  const [count, setCount] = useState(0)
+//la logica va aca
+
+//si voy a moficiar el estado uso USESTATE:
+const {nombres, loading, peticionesDeUsuarios} = useUsuarios(); //con esto, traigo la data del comp. customizado
+const [selection, setSelection] = useState(null);
+
+
+
+
+
+//cada ves que paso un evento, que se vea en el console el nombre (el target me permite ver todos los datos )
+const handlerClick = usuario => {
+  setSelection(usuario);
+  
+}
+
+const handlerReset = () => {setSelection(null)};
+
 
   return (
+    //esto es lo que va a inyectarse en el virtual DOM, y me permite utilizar HTML y JS
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+  <div>
+    {/*cada boton, cada vez que haga click, que cambi el nombre (que modifique el estado) */}
+    {/* <button onMouseEnter={ ()=> setNombre("Santiago") }>Santi</button>
+    <button onClick={ (e)=> handleClick(e) }>Martin</button>
+    <button onClick={ ()=> setNombre("Melissa") }>Melissa</button> */}
+
+{/* para no repetir el mismo codigo, lo que hago es crear un array de objetos, y luego lo recorro con un map */}
+    <div>
+    {loading && <p>Cargando...</p>} {/* si hay loading, que me muestre el cargando */}
+    {!loading && nombres.map( 
+      nombre => (<button 
+      onClick={()=> handlerClick(nombre)} 
+      key={nombre.id}
+      >{nombre.username}</button>)
+    )} {/* agregarle siempre una key para que sepa a donde apuntar*/}
+
+{/* para resetarlo al valor inicial: */}
+<button onClick={handlerReset}>Reset</button>
+{/* para generar una accion, se usa los on... */}
+
+
+  </div>
+
+<hr />
+    <p>Hola mundo</p>
+    <p>{selection && selection.username}</p>
+  </div>
+
     </>
   )
 }
